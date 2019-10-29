@@ -1,0 +1,52 @@
+<html>
+
+<head>
+    <title>Hello Fabric</title>
+    <script src="./libs/vendor/three.js"></script>
+    <script src="./libs/vendor/fabric.js"></script>
+    <script src="./libs/bimv.dwg.iife.js"></script>
+    <style></style>
+</head>
+
+<body onload="load();">
+    <!-- <div id='viewport' style="width: 100%; height: 100%; background: rgba(200, 0, 0, 0.5);"></div> -->
+    <div id='viewport'
+        style="position:absolute;left:0%;width: 49%; height: 100%; background: rgba(200, 0, 0, 0.5);outline:none;">
+    </div>
+    <div id='viewport2'
+        style="position:absolute;right:0px;width: 49%; height: 100%; background: rgba(200, 0, 0, 0.5);outline:none;">
+    </div>
+    <script>
+        function load() {
+            var manager = new bimv.dwg.Manager({
+                // parent: 'viewport',
+                parent: document.getElementById('viewport'),
+                plugins: {
+                    markup: {
+
+                    },
+                    measure: {
+
+                    }
+                }
+            });
+
+            var manager2 = new bimv.dwg.Manager({
+                // parent: 'viewport',
+                parent: document.getElementById('viewport2'),
+                plugins: {
+                    markup: {
+
+                    },
+                    measure: {
+
+                    }
+                }
+            });
+            console.log(manager, manager2);
+
+        }
+    </script>
+</body>
+
+</html>
