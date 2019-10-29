@@ -52,9 +52,10 @@ export class Manager extends Trigger {
                 this._markup = new Markup(parent, {
 
                 });
-                new Control(this._view2d, this._markup, {
+                let control = new Control(parent,this._view2d, this._markup, {
 
                 });
+                control.setUp();
             }
             if(this._options.plugins.measure) {
                 this._measure = null;

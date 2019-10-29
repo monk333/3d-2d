@@ -36,4 +36,13 @@ export class Markup extends Base {
     render() {
         console.log('render');
     }
+
+    /**
+     *处理mosuedown 事件
+     *
+     * @memberof Markup
+     */
+    handle_mousedown(e) {
+        console.log('markup:', e);
+    }
 }

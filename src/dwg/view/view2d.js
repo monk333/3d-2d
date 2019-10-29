@@ -47,9 +47,7 @@ export class View2D extends View {
 
         let scene = this._model.scene;
         if (Util.DEBUG) {
-            if (this._debug.inspector) {
-                window.scene = this._model && this._model.scene;
-            }
+            window.scene = this._model && this._model.scene;
         }
 
         // init camera
@@ -108,6 +106,15 @@ export class View2D extends View {
     }
 
     update() {
-        console.log('update');
+        // console.log('update');
+    }
+
+    /**
+     *处理mosuedown 事件
+     *
+     * @memberof Markup
+     */
+    handle_mousedown(e) {
+        console.log('view2d:', e);
     }
 }
