@@ -21,7 +21,7 @@ export class View extends Trigger {
         }
         parent.tabIndex = 0;
         parent.style.outline = 'none';
-        this._parent = parent;
+        this.parent = parent;
     }
 
     /**

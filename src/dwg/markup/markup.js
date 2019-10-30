@@ -27,7 +27,7 @@ export class Markup extends Base {
         });
 
         // "add" rectangle onto canvas
-        this.model.add(rect);
+        this.canvas.add(rect);
     }
 
     /**
@@ -44,5 +44,24 @@ export class Markup extends Base {
      */
     handle_mousedown(e) {
         console.log('markup:', e);
+    }
+
+    /**
+     * zoom center
+     *
+     * @param {*} e
+     * @memberof Markup
+     */
+    handle_mousewheel(e) {
+        console.log('markup:', e);
+        let delta = e.deltaY;
+        let canvas = this.canvas;
+        var zoom = canvas.getZoom();
+        zoom = zoom + delta / 200;
+        if (zoom > 20) zoom = 20;
+        if (zoom < 0.01) zoom = 0.01;
+        canvas.setZoom(zoom);
+        e.preventDefault();
+        e.stopPropagation();
     }
 }

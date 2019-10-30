@@ -40,22 +40,22 @@ export class Base extends Trigger {
             return;
         }
 
-        let model = new fabric.Canvas(domElement.id, {
+        let canvas = new fabric.Canvas(domElement.id, {
             width,
             height,
             backgroundColor: Util.DEBUG ? 'rgba(0,0,100,0.8)' : 'rgba(0,0,0,0)',
         });
-        model.upperCanvasEl.id = `${parent.id}-upperCanvasEl`;
-        model.wrapperEl.id = `${parent.id}-wrapperEl`;
+        canvas.upperCanvasEl.id = `${parent.id}-upperCanvasEl`;
+        canvas.wrapperEl.id = `${parent.id}-wrapperEl`;
 
-        fabric.util.setStyle(model.wrapperEl, {
+        fabric.util.setStyle(canvas.wrapperEl, {
             width: `${width}px`,
             height: `${height}px`,
             position: 'absolute',
             left: '0px',
             top: '0px',
         });
-        this.model = model;
+        this.canvas = canvas;
 
         if (Util.DEBUG) {
             domElement.style.backgroundColor = 'rgba(100,100,0,0.5)';

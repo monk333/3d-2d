@@ -27,6 +27,9 @@ export class Control extends Trigger {
      * @memberof Control
      */
     setUp() {
+        let view = this._view;
+        let defaultInteraction = view.defaultInteraction;
+        defaultInteraction.dispose();
         this.addListener('mousedown', 'mouseover', 'mousemove', 'mousewheel', 'mouseout', 'keydown');
     }
 
@@ -60,7 +63,7 @@ export class Control extends Trigger {
 
     handle_mousemove(e) {
         e.preventDefault();
-        e.stopPropagation();
+        // e.stopPropagation();
         console.log('mousemove');
     }
 
@@ -74,6 +77,8 @@ export class Control extends Trigger {
         e.preventDefault();
         e.stopPropagation();
         console.log('mousewheel');
+        this._view.handle_mousewheel(e);
+        this._plugin.handle_mousewheel(e);
     }
 
     handle_keydown(e) {

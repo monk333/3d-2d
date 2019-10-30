@@ -3,6 +3,7 @@ import { Trigger } from "../inner/trigger"
 import { View } from './view';
 import { Model } from '../model/model';
 import * as Util from '../inner/util';
+import { DefaultInteraction } from '../interactions/DefaultInteraction';
 
 /**
  *
@@ -23,6 +24,7 @@ export class View2D extends View {
         };
         this._model = new Model();
         this.initWebGL();
+        this.setDefaultInteraction();
         this.render();
 
     }
@@ -33,17 +35,22 @@ export class View2D extends View {
      * @memberof View
      */
     initWebGL() {
-        if (!this._parent) {
+        if (!this.parent) {
             console.error('no parent div!');
         }
-        let SCREEN_WIDTH = this._parent.clientWidth, SCREEN_HEIGHT = this._parent.clientHeight;
+        let SCREEN_WIDTH = this.parent.offsetWidth, SCREEN_HEIGHT = this.parent.offsetHeight;
 
         // init renderer
         let renderer = this.renderer = new THREE.WebGLRenderer({
-            antialias: true
+            antialias: true,
+            alpha: true,
+            preserveDrawingBuffer: true,
         });
+        renderer.setClearColor(0x414141, 1);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.autoClear = true;
         renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-        this._parent.appendChild(renderer.domElement);
+        this.parent.appendChild(renderer.domElement);
 
         let scene = this._model.scene;
         if (Util.DEBUG) {
@@ -52,7 +59,12 @@ export class View2D extends View {
 
         // init camera
         var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
-        let camera = this.camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+
+
+        let camera = this.camera = new THREE.OrthographicCamera(-SCREEN_WIDTH / 2, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, -SCREEN_HEIGHT / 2);
+
+        let viewport = this.calViewport();
+        // let camera = this.camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
         camera.position.set(0, 150, 400);
         camera.lookAt(scene.position);
         scene.add(camera);
@@ -94,6 +106,31 @@ export class View2D extends View {
     }
 
     /**
+     * 安装默认交互事件
+     *
+     * @memberof View2D
+     */
+    setDefaultInteraction() {
+        let defaultInteraction = new DefaultInteraction(this.camera, this.parent);
+        defaultInteraction.target.x = this.camera.position.x;
+        defaultInteraction.target.y = this.camera.position.y;
+        defaultInteraction.target.z = 0;
+        defaultInteraction.enableRotate = false;
+        defaultInteraction.zoomSpeed = 2;
+        defaultInteraction.noRotate = true;
+        defaultInteraction.reset();
+        this.defaultInteraction = defaultInteraction;
+    }
+
+    /**
+     * 计算Viewport信息
+     *
+     * @memberof View2D
+     */
+    calViewport() {
+        return {};
+    }
+    /**
      * render
      */
     render() {
@@ -116,5 +153,11 @@ export class View2D extends View {
      */
     handle_mousedown(e) {
         console.log('view2d:', e);
+    }
+
+
+    handle_mousewheel(e) {
+        console.log('view2d:', e);
+        console.log(this.defaultInteraction.handleMouseWheel(e));
     }
 }
