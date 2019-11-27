@@ -1,0 +1,76 @@
+<html>
+
+<head>
+    <script src="../docs/libs/vendor/three.js"></script>
+    <!-- <script src="../docs/libs/vendor/fabric.js"></script> -->
+    <script src="../docs/libs/vendor/fabric_with_gestures.js"></script>
+    <script src="../docs/libs/device.js"></script>
+    <script src="../docs/libs/vconsole.min.js"></script>
+    <!-- <script src="../docs/libs/bimv.dwg.iife.js"></script> -->
+</head>
+
+<body>
+
+    <canvas id="canvas" width="1200" height="1000"
+        style="width: 100%; height: 100%;background: rgba(100,0,0,0.2);"></canvas>
+    <script>
+        var vConsole = new VConsole();
+        console.log('Hello world');
+        var canvas = new fabric.Canvas('canvas');
+        fabric.Image.fromURL('./checkerboard.jpg', function (img) {
+            img.scale(0.5).set({
+                left: 150,
+                top: 150,
+                angle: -15
+            });
+            canvas.add(img).setActiveObject(img);
+        });
+
+        var info = document.getElementById('info');
+        var lastX, lastY, zoomStartScale, pausePanning;
+        var currentX,
+            currentY,
+            xChange,
+            yChange;
+
+        canvas.on({
+            'touch:gesture': function (e) {
+                console.log('gesture');
+                if (e.e.touches && e.e.touches.length == 2) {
+                    pausePanning = true;
+                    var point = new fabric.Point(e.self.x, e.self.y);
+                    if (e.self.state == "start") {
+                        zoomStartScale = canvas.getZoom();
+                    }
+                    var delta = zoomStartScale * e.self.scale;
+                    canvas.zoomToPoint(point, delta);
+                    pausePanning = false;
+                }
+            },
+            'object:selected': function () {
+                pausePanning = true;
+            },
+            'selection:cleared': function () {
+                pausePanning = false;
+            },
+            'touch:drag': function (e) {
+                if (pausePanning == false && undefined != e.e.layerX && undefined != e.e.layerY) {
+                    currentX = e.e.layerX;
+                    currentY = e.e.layerY;
+                    xChange = currentX - lastX;
+                    yChange = currentY - lastY;
+
+                    if ((Math.abs(currentX - lastX) <= 50) && (Math.abs(currentY - lastY) <= 50)) {
+                        var delta = new fabric.Point(xChange, yChange);
+                        canvas.relativePan(delta);
+                    }
+
+                    lastX = e.e.layerX;
+                    lastY = e.e.layerY;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -30,7 +30,11 @@ export class Control extends Trigger {
         let view = this._view;
         let defaultInteraction = view.defaultInteraction;
         defaultInteraction.dispose();
-        this.addListener('mousedown', 'mouseover', 'mousemove', 'mousewheel', 'mouseout', 'keydown');
+        if (window.device && device.mobile()) {
+            alert('mobile');
+        } else {
+            this.addListener('mousedown', 'mouseover', 'mousemove', 'mousewheel', 'mouseout', 'keydown');
+        }
     }
 
     /**
